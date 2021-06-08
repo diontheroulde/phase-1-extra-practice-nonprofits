@@ -1,5 +1,5 @@
 # Goal
-Today you'll be building an app for donating to nonprofits!! You will be using a local API and building out the frontend for our app.
+Today you'll be building an app for donating to nonprofits!! You will be using a local API and building out the frontend for our app (check mockup.png for some basic info about what this will look like! )
 
 ## Setup
 
