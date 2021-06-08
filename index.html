@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <title>Donation App</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <div id = "browse-nonprofits">
+            <!-- show list of nonprofits here -->
+        </div>
+
+        <div class = "nonprofitInfo">
+            <div id="detailed-info">
+                <p id="name">Nonprofit's Name</p>
+                <img id="image" src="assets/dummy.gif"><!-- display nonprofit logo here -->
+                <p id="description">This is a description of the nonprofit so that you have more information about whether you want to donate to it.</p>
+                <h4>Total Donations: <span id="donations">$0</span> </h4>
+                <form id="donation-form">
+                    <input type="hidden" value="Nonprofit's ID" id="nonprofitId"/> <!-- Assign nonprofit id as a value here -->
+                    <input type="text" placeholder="Enter Donation Amount" id="donations"/>
+                    <input type="submit" value="Add Donation"/>
+                </form>
+                <button id="reset-btn">Reset Donations</button>
+            </div>
+        </div>
+        <script src="src/index.js"></script>
+    </body>
+</html>
