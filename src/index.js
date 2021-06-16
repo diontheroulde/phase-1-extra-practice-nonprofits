@@ -1,53 +1,67 @@
-
-const nonProfitImage = document.querySelector("img#image")
-const nonProfitDescription = document.querySelector("p#description")
-
-const nonProfitDetailDiv = document.querySelector("div#detailed-info")
-
-document.addEventListener("DOMContentLoaded", () => {
+const nonProfitContainer = document.querySelector("#browse-nonprofits")
 
 fetch("http://localhost:3000/nonprofits")
-.then(res => res.json())
-.then(data => {
-        const nonProfitDiv = document.querySelector("#browse-nonprofits")
-        const nonProfitList = document.createElement('ul')
-        nonProfitDiv.append(nonProfitList)
-        const nonProfitListItems = document.createElement("li")
-        const nonProfitListName = document.createElement("p")
-        nonProfitListItems.append(nonProfitListName)
-        nonProfitListName.innerHTML = data.name
-        nonProfitList.append(nonProfitListItems)
-      
+  .then(res => res.json())
+  .then(nonProfits => {
+    nonProfits.forEach(nonProfit => {
+      const nonProfitName = nonProfit.name
+      const nonProfitId = nonProfit.id
+      const newSpanElement = document.createElement("span")
+      newSpanElement.innerHTML = nonProfitName
+      nonProfitContainer.append(newSpanElement)
+      newSpanElement.addEventListener("click", () => {
+        fetch(`http://localhost:3000/nonprofits/${nonProfitId}`)
+          .then(res => res.json())
+          .then(nonProfit => {
+            const nonProfitName = nonProfit.name
+            const nameElement = document.querySelector("p#name")
+            nameElement.innerHTML = nonProfitName
 
+            const nonProfitImage = document.querySelector("#image")
+            const imageElement = nonProfit.image
+            nonProfitImage.src = imageElement
 
+            const nonProfitDescription = document.querySelector("#description")
+            const descriptionElement = nonProfit.description
+            nonProfitDescription.innerHTML = descriptionElement
 
+            const donationElement = document.querySelector("#donations")
+            const nonProfitDonation = nonProfit.donations
+            donationElement.innerHTML = nonProfitDonation
 
+            const formId = document.querySelector("#nonprofitId")
+            formId.value = nonProfit.id
+          })
+      })
     })
-        
-        
+  })
+
+const donationForm = document.querySelector("#donation-form")
+donationForm.addEventListener("submit", (event) => {
+  event.preventDefault()
+  const newDonationInput = document.querySelector("input#donations")
+  const newDonationAmount = parseInt(newDonationInput.value)
+  const nonProfitId = document.querySelector("#nonprofitId").value
+
+  const donationElement = document.querySelector("#donations")
+  const currentDonationAmount = parseInt(donationElement.innerHTML)
+
+  const donationTotal = newDonationAmount + currentDonationAmount
+
+  fetch(`http://localhost:3000/nonprofits/${nonProfitId}`, {
+    method: "PATCH",
+    headers: {
+  	"Content-Type": "application/json",
+  	Accept: "application/json"
+    },
+    body: JSON.stringify({
+      donations: donationTotal
     })
- 
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-// data.nonprofits.forEach(nonprofit => {
-//     const nonProfitDiv = document.querySelector("div#browse-nonprofits")
-//     const nonProfitList = document.createElement('ul')
-//     const nonProfitListItems = document.createElement("li")
-//     const nonProfitListName = document.createElement("p")
-//     nonProfitListName.innerHTML = nonprofit.name
-//     nonProfitListItems.append(nonProfitListName)
-//     nonProfitList.append(nonProfitListItems)
-//     nonProfitDiv.append(nonProfitList)
+  })
+  .then(res => res.json())
+  .then(updatedNonProfit => {
+    const updatedDonationAmount = updatedNonProfit.donations
+    const donationElement = document.querySelector("#donations")
+    donationElement.innerHTML = updatedDonationAmount
+  })
+})
